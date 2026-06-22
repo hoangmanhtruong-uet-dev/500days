@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Quản Lý Hành Trình 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+  <div class="glow-bg"></div>
+
+  <!-- PHẦN ĐĂNG NHẬP -->
+  <main class="login-container" id="login-section">
+    <div class="glass-card login-card">
+      <div class="heart-icon">
+        <svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Trái tim -->
+          <path d="M32 54C32 54 12 40 12 26C12 20 16 14 22 14C26 14 30 17 32 20C34 17 38 14 42 14C48 14 52 20 52 26C52 40 32 54 32 54Z" fill="rgba(232,81,106,0.2)" stroke="#e8516a"/>
+          <!-- Ổ khóa trên trái tim -->
+          <rect x="26" y="29" width="12" height="10" rx="2" fill="rgba(232,81,106,0.5)" stroke="#e8516a" stroke-width="1.8"/>
+          <!-- Vòng khóa (phần móc) -->
+          <path d="M29 29V24C29 21.2 31.2 19 34 19C36.8 19 39 21.2 39 24V25" fill="none" stroke="#e8516a" stroke-width="2"/>
+          <!-- Lỗ khóa nhỏ -->
+          <circle cx="32" cy="34" r="1.8" fill="#e8516a" stroke="none"/>
+        </svg>
+      </div>
+      <h2>Đăng Nhập Admin</h2>
+      <p class="subtitle">Nhập mật khẩu để quản lý hành trình tình yêu</p>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <input type="password" id="password" placeholder="Nhập mật khẩu..." required autocomplete="current-password" />
+        </div>
+        <div class="error-msg" id="login-error"></div>
+        <button type="submit" class="admin-btn primary">Đăng Nhập</button>
+      </form>
+      <a href="index.html" class="back-link">← Quay lại trang chủ</a>
+    </div>
+  </main>
+
+  <!-- PHẦN BẢNG ĐIỀU KHIỂN (DASHBOARD) -->
+  <main class="dashboard-container" id="dashboard-section" style="display: none;">
+    <header class="dashboard-header">
+      <div class="header-title">
+        <h1>Quản Lý Hành Trình</h1>
+        <p>Athune &amp; MtruongDayy 💕</p>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="admin-btn text-btn">Trang Chủ</a>
+        <a href="journey.html" class="admin-btn text-btn">Xem Hành Trình</a>
+        <button id="btn-reset-db" class="admin-btn danger" type="button">Reset về mặc định</button>
+        <button id="btn-logout" class="admin-btn secondary" type="button">Đăng xuất</button>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <!-- Cột trái: Danh sách kỷ niệm -->
+      <section class="glass-card list-section">
+        <div class="section-header">
+          <h2>Danh Sách Kỷ Niệm</h2>
+          <button id="btn-add-new" class="admin-btn primary-sm" type="button">+ Thêm Mới</button>
+        </div>
+        <div class="milestones-list" id="milestones-list">
+          <!-- Các kỷ niệm sẽ được load động ở đây -->
+        </div>
+      </section>
+
+      <!-- Cột phải: Form soạn thảo (Thêm/Sửa) -->
+      <section class="glass-card form-section" id="form-container" style="display: none;">
+        <div class="section-header">
+          <h2 id="form-title">Sửa Kỷ Niệm</h2>
+        </div>
+        
+        <form id="milestone-form">
+          <input type="hidden" id="milestone-id" />
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="milestone-day">Ngày diễn ra</label>
+              <input type="date" id="milestone-day" required />
+            </div>
+            <div class="form-group">
+              <label for="milestone-duration">Thời lượng slide (giây)</label>
+              <input type="number" id="milestone-duration" min="1" max="60" value="5" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="milestone-title">Tiêu đề kỷ niệm</label>
+            <input type="text" id="milestone-title" placeholder="Ví dụ: Buổi Hẹn Đầu Tiên..." required />
+          </div>
+
+          <div class="form-group">
+            <label for="milestone-desc">Mô tả kỷ niệm</label>
+            <textarea id="milestone-desc" rows="4" placeholder="Nhập những lời yêu thương hoặc kỉ niệm đáng nhớ..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Hình ảnh kỉ niệm</label>
+            <div class="upload-area">
+              <input type="file" id="image-upload" accept="image/*" multiple style="display: none;" />
+              <label for="image-upload" class="upload-label">
+                <svg viewBox="0 0 24 24" width="28" height="28">
+                  <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                <span>Nhấn để chọn ảnh kỉ niệm</span>
+              </label>
+            </div>
+            <div class="image-previews" id="image-previews">
+              <!-- Xem trước ảnh sẽ được load ở đây -->
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="btn-cancel" class="admin-btn secondary">Hủy Bỏ</button>
+            <button type="submit" class="admin-btn primary">Lưu Thay Đổi</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Panel chào mừng khi chưa chọn gì -->
+      <section class="glass-card welcome-panel" id="welcome-panel">
+        <div class="welcome-content">
+          <span class="heart-pulse">💖</span>
+          <h3>Bảng Quản Trị Hành Trình</h3>
+          <p>Chọn một kỷ niệm từ danh sách bên trái để chỉnh sửa, hoặc bấm "Thêm Mới" để tạo một mốc thời gian đáng nhớ mới.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="db.js"></script>
+  <script src="admin.js"></script>
+</body>
+
+</html>

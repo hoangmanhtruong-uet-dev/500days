@@ -1,0 +1,8 @@
+{
+  "name": "500days",
+  "version": "1.0.0",
+  "description": "Athune & MtruongDayy - 500 Days of Love",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

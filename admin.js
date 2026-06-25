@@ -398,5 +398,59 @@ function renderImagePreviews() {
   });
 }
 
+// --- EXPORT / IMPORT DỮ LIỆU ---
+
+document.getElementById('btn-export').addEventListener('click', async () => {
+  try {
+    const data = await getMemoriesFromDB();
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '500days-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('✅ Export thành công! File JSON đã được tải về.');
+  } catch (error) {
+    console.error('Export lỗi:', error);
+    alert('Không thể export dữ liệu.');
+  }
+});
+
+document.getElementById('import-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+
+    if (!Array.isArray(data)) {
+      alert('File JSON không hợp lệ! Cần là một mảng các kỷ niệm.');
+      return;
+    }
+
+    const ok = confirm(`Bạn có chắc muốn import ${data.length} kỷ niệm? Dữ liệu hiện tại sẽ bị thay thế hoàn toàn.`);
+    if (!ok) {
+      e.target.value = '';
+      return;
+    }
+
+    await saveMemoriesToDB(data);
+    await loadMilestones();
+    formContainer.style.display = 'none';
+    welcomePanel.style.display = 'flex';
+    alert(`✅ Import thành công ${data.length} kỷ niệm!`);
+  } catch (error) {
+    console.error('Import lỗi:', error);
+    alert('File JSON không hợp lệ hoặc bị lỗi: ' + error.message);
+  }
+
+  e.target.value = '';
+});
+
 // Chạy khởi tạo
 checkAuth();
